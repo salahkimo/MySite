@@ -35,7 +35,7 @@ app.post("/vote", (req, res) => {
 });
 
 app.get("/results", (req, res) => {
-  res.sendFile(__dirname + "/views/results.html");
+  res.sendFile(__dirname + "/views/resultats.html");
 });
 
 app.listen(PORT, () => console.log("Server running on port " + PORT));
