@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Résultats</title>
+  <meta http-equiv="refresh" content="2" />
+</head>
+<body>
+  <h1>Résultats</h1>
+  <div id="results"></div>
+
+  <script>
+    async function load() {
+      const r = await fetch("/results-json");
+      const data = await r.json();
+      document.getElementById("results").innerHTML =
+        `A : ${data.A}<br>B : ${data.B}`;
+    }
+    setInterval(load, 1000);
+    load();
+  </script>
+</body>
+</html>
