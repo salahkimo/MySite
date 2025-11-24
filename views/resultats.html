@@ -1,23 +1,102 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <title>Résultats</title>
-  <meta http-equiv="refresh" content="2" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Résultats en temps réel</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #1e1e2e;
+            color: #fff;
+            text-align: center;
+            padding: 30px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        #results {
+            font-size: 24px;
+            margin: 20px 0;
+        }
+
+        .card {
+            background: #2a2a40;
+            padding: 25px;
+            border-radius: 12px;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 8px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btnA {
+            background: #28D7A4;
+        }
+        .btnB {
+            background: #FF6B6B;
+        }
+        .btnMinus {
+            background: #ffaa33;
+        }
+
+        button:hover {
+            opacity: 0.85;
+        }
+    </style>
 </head>
 <body>
-  <h1>Résultats</h1>
-  <div id="results"></div>
 
-  <script>
-    async function load() {
-      const r = await fetch("/results-json");
-      const data = await r.json();
-      document.getElementById("results").innerHTML =
-        `A : ${data.A}<br>B : ${data.B}`;
-    }
-    setInterval(load, 1000);
-    load();
-  </script>
+    <h1>Résultats en temps réel</h1>
+
+    <div class="card">
+        <div id="results">Chargement...</div>
+
+        <h2>Modifier les votes (Admin)</h2>
+
+        <button class="btnA" onclick="modify('A', 1)">+1 A</button>
+        <button class="btnMinus" onclick="modify('A', -1)">-1 A</button>
+
+        <br>
+
+        <button class="btnB" onclick="modify('B', 1)">+1 B</button>
+        <button class="btnMinus" onclick="modify('B', -1)">-1 B</button>
+    </div>
+
+    <script>
+        async function load() {
+            const res = await fetch("/results-json");
+            const data = await res.json();
+
+            document.getElementById("results").innerHTML =
+                `🟢 A : <strong>${data.A}</strong><br>
+                 🔴 B : <strong>${data.B}</strong>`;
+        }
+
+        // Modifier les votes
+        async function modify(choice, value) {
+            await fetch("/modify", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ choice, value })
+            });
+            load(); // actualise après modification
+        }
+
+        // Chargement auto toutes les 1s
+        setInterval(load, 1000);
+        load();
+    </script>
 </body>
 </html>
