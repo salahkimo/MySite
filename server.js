@@ -34,14 +34,8 @@ app.post("/vote", (req, res) => {
   res.send("Merci pour votre vote !");
 });
 
-// Page admin résultats
 app.get("/results", (req, res) => {
-  const votes = loadVotes();
-  res.send(`
-    <h1>Résultats :</h1>
-    <p>A : ${votes.A}</p>
-    <p>B : ${votes.B}</p>
-  `);
+  res.sendFile(__dirname + "/views/results.html");
 });
 
 app.listen(PORT, () => console.log("Server running on port " + PORT));
